@@ -7,23 +7,22 @@ package com.retrofit.write.retrofit;
  * Des:
  */
 public interface ParameterHandler<T> {
-    void  apply(RequestBuilder requestBuilder,T value);
+    void apply(RequestBuilder requestBuilder, T value);
 
 
-    class Query<T> implements  ParameterHandler<T>{
+    class Query<T> implements ParameterHandler<T> {
 
         private String key; // 保存 就是参数的 key = userName ,password
 
-        public Query(String key){
+        public Query(String key) {
             this.key = key;
         }
 
         @Override
         public void apply(RequestBuilder requestBuilder, T value) {
-            requestBuilder.addQueryName(key,value.toString());
+            requestBuilder.addQueryName(key, value.toString());
         }
     }
-
 
 
 }

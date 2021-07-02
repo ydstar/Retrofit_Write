@@ -12,7 +12,9 @@ import okhttp3.OkHttpClient;
  * Author: 信仰年轻
  * Date: 2021-07-01 17:44
  * Email: hydznsqk@163.com
- * Des:
+ * Des: 1.动态代理
+ *      2.解析方法上的注解和解析参数上的注解
+ *      3.封装OkHttp请求
  */
 public class Retrofit {
 
@@ -27,6 +29,9 @@ public class Retrofit {
         this.mCallFactory = builder.callFactory;
     }
 
+    /**
+     * 1.动态代理
+     */
     public <T> T create(Class<T> service) {
         return (T) Proxy.newProxyInstance(service.getClassLoader(), new Class[]{service}, new InvocationHandler() {
 
@@ -37,16 +42,18 @@ public class Retrofit {
                 if (method.getDeclaringClass() == Object.class) {
                     return method.invoke(this, args);
                 }
-                // 解析参数注解
+                //2.解析方法上的注解和解析参数上的注解
                 ServiceMethod serviceMethod = loadServiceMethod(method);
-                //封装okhttpCall
+                //3.封装OkHttp请求
                 OkHttpCall okHttpCall = new OkHttpCall(serviceMethod, args);
                 return okHttpCall;
             }
         });
     }
 
-    // 解析参数注解
+    /**
+     * 2.解析方法上的注解和解析参数上的注解
+     */
     private ServiceMethod loadServiceMethod(Method method) {
         ServiceMethod serviceMethod = serviceMethodMap.get(method);
         if (serviceMethod == null) {
