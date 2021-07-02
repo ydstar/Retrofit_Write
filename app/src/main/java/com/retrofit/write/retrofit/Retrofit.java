@@ -6,20 +6,19 @@ import java.lang.reflect.Proxy;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-
 import okhttp3.OkHttpClient;
 
 /**
  * Author: 信仰年轻
  * Date: 2021-07-01 17:44
- * Email: houyadong@zhufaner.com
+ * Email: hydznsqk@163.com
  * Des:
  */
 public class Retrofit {
 
 
-    private String mBaseUrl;
-    private okhttp3.Call.Factory mCallFactory;
+    String mBaseUrl;
+    okhttp3.Call.Factory mCallFactory;
 
     private Map<Method, ServiceMethod> serviceMethodMap = new ConcurrentHashMap<>();
 
@@ -29,7 +28,6 @@ public class Retrofit {
     }
 
     public <T> T create(Class<T> service) {
-
         return (T) Proxy.newProxyInstance(service.getClassLoader(), new Class[]{service}, new InvocationHandler() {
 
             @Override
@@ -48,10 +46,11 @@ public class Retrofit {
         });
     }
 
-
+    // 解析参数注解
     private ServiceMethod loadServiceMethod(Method method) {
         ServiceMethod serviceMethod = serviceMethodMap.get(method);
         if (serviceMethod == null) {
+            //创建ServiceMethod,把Retrofit和Method都传递进去进行解析
             serviceMethod = new ServiceMethod.Builder(this, method).build();
             serviceMethodMap.put(method, serviceMethod);
         }
