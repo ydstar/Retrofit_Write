@@ -16,7 +16,7 @@ import okhttp3.ResponseBody;
  * Author: 信仰年轻
  * Date: 2021-07-01 18:49
  * Email: hydznsqk@163.com
- * Des:
+ * Des: 解析方法上的注解和参数上的注解
  */
 public class ServiceMethod {
 
@@ -43,6 +43,9 @@ public class ServiceMethod {
         return mRetrofit.mCallFactory.newCall(requestBuilder.build());
     }
 
+    /**
+     * 解析ResponseBody
+     */
     public <T> T parseBody(ResponseBody responseBody) {
         // 获取解析类型 T 获取方法返回值的类型
         Type returnType = mMethod.getGenericReturnType();// 返回值对象
@@ -76,11 +79,11 @@ public class ServiceMethod {
         }
 
         public ServiceMethod build() {
-            //解析方法上的注解
+            //1.解析方法上的注解
             for(Annotation annotation:mMethodAnnotations){
                 parseAnnotationMethod(annotation);
             }
-            // 解析参数注解
+            //2.解析参数注解
             for(int x=0;x<mParameterAnnotations.length;x++){
                 Annotation annotation = mParameterAnnotations[x][0];
                 //在这里只有Query这个注解
@@ -93,7 +96,7 @@ public class ServiceMethod {
             return new ServiceMethod(this);
         }
 
-        //解析方法上的注解
+        //1.解析方法上的注解
         private void parseAnnotationMethod(Annotation annotation) {
             if(annotation instanceof GET){
                 parseMethodAndPath("GET",((GET) annotation).value());
